@@ -5,7 +5,7 @@ const OpenAIApi = require('openai');
 // });
 
 var openai = new OpenAIApi();
-exports.test = async (req, res) => {
+exports.test = async (req, res, error) => {
     try{
         const response = await sendRequest();
         res.status(200).json({response});
@@ -13,8 +13,6 @@ exports.test = async (req, res) => {
     catch(error) {
         res.status(500).json({ message: "Error fetching data", error });
     }
-    res.send("executing test VectorEmbeddings request");
-    res.sendRequest()
 }
 
 
