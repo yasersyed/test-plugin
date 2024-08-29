@@ -5,9 +5,9 @@ const OpenAIApi = require('openai');
 // });
 
 var openai = new OpenAIApi();
-exports.test = async (req, res, error) => {
+exports.testVe = async (req, res, error) => {
     try{
-        const response = await sendRequest();
+        const response = await sendVectorEmbeddingRequest();
         res.status(200).json({response});
     }
     catch(error) {
@@ -15,15 +15,57 @@ exports.test = async (req, res, error) => {
     }
 }
 
+exports.testImageGen = async (req, res, error) => {
+    try{
+        const response = await sendImageGenRequest(req.query.prompt);
+        res.status(200).json({response});
+    }
+    catch(error) {
+        res.status(500).json({ message: "Error fetching data", error });
+    }
+}
 
-async function sendRequest() {
+exports.testTextGen = async (req, res, error) => {
+    try{
+       const response = await sendTextGenerationRequest(req.query.prompt, req.query.maxTokens);
+       res.status(200).json({response});
+    }
+    catch(error) {
+        res.status(500).json({ message: "Error fetching data", error });
+    }
+}
+
+async function sendImageGenRequest(prompt) {
+    const response = await openai.images.generate({
+        model: "dall-e-3",
+        prompt: prompt,
+        n: 1,
+        size: "1024x1024",
+    });
+    return response.data;
+}
+
+
+async function sendVectorEmbeddingRequest() {
 // const OpenAI = require('openai');
 // const openai = new openai();
 
 const embedding = await openai.embeddings.create({
-    model: "text-embedding-3-large",
+    model: "text-embedding-3-small",
     input: "Action Motivation Inspiration",
 });
 
 return embedding;
+}
+
+async function sendTextGenerationRequest(prompt, maxTokens)
+{
+    const res = await openai.chat.completions.create({
+        model : "gpt-4o-mini",
+        promtp: prompt,
+        max_tokens: maxTokens,
+        temperature: 0.7,
+    });
+
+    return res.data;
 }
