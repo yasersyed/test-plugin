@@ -62,10 +62,13 @@ async function sendTextGenerationRequest(prompt, maxTokens)
 {
     const res = await openai.chat.completions.create({
         model : "gpt-4o-mini",
-        promtp: prompt,
-        max_tokens: maxTokens,
+        messages:[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+          ],
+        // max_tokens: maxTokens,
         temperature: 0.7,
     });
 
-    return res.data;
+    return res.choices[0].message.content.trim();
 }
