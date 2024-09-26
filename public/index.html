@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DALL·E Image Generator</title>
+</head>
+<body>
+  <h1>DALL·E Image Generator</h1>
+  <input type="text" id="prompt" placeholder="Enter a prompt" size="50" />
+  <button id="generateButton">Generate Image</button>
+  <br><br>
+  <div id="imageContainer"></div>
+
+  <script>
+    document.getElementById('generateButton').addEventListener('click', () => {
+      const prompt = document.getElementById('prompt').value;
+      const imageUrl = `/image?prompt=${encodeURIComponent(prompt)}`;
+
+      // Create an image element
+      const img = document.createElement('img');
+      img.src = imageUrl;
+      img.alt = 'Generated Image';
+      img.width = 512;
+      img.height = 512;
+
+      // Clear previous images and display the new one
+      const imageContainer = document.getElementById('imageContainer');
+      imageContainer.innerHTML = '';
+      imageContainer.appendChild(img);
+    });
+  </script>
+</body>
+</html>

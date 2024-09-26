@@ -1,4 +1,5 @@
 const OpenAIApi = require('openai');
+const imageGen = require('../scripts/ImageGenerator');
 
 // const configuration = new Configuration({
 //     apiKey: process.env.OPENAI_API_KEY,
@@ -7,7 +8,7 @@ const OpenAIApi = require('openai');
 var openai = new OpenAIApi();
 exports.testVe = async (req, res, error) => {
     try{
-        const response = await sendVectorEmbeddingRequest();
+        const response = await sendVectorEmbeddingRequest(req.query.prompt);
         res.status(200).json({response});
     }
     catch(error) {
@@ -17,7 +18,7 @@ exports.testVe = async (req, res, error) => {
 
 exports.testImageGen = async (req, res, error) => {
     try{
-        const response = await sendImageGenRequest(req.query.prompt);
+        const response = await imageGen.sendImageGenRequest(req.query.prompt);
         res.status(200).json({response});
     }
     catch(error) {
@@ -35,24 +36,24 @@ exports.testTextGen = async (req, res, error) => {
     }
 }
 
-async function sendImageGenRequest(prompt) {
-    const response = await openai.images.generate({
-        model: "dall-e-3",
-        prompt: prompt,
-        n: 1,
-        size: "1024x1024",
-    });
-    return response.data;
-}
+// async function sendImageGenRequest(prompt) {
+//     const response = await openai.images.generate({
+//         model: "dall-e-3",
+//         prompt: prompt,
+//         n: 1,
+//         size: "1024x1024",
+//     });
+//     return response.data;
+// }
 
 
-async function sendVectorEmbeddingRequest() {
+async function sendVectorEmbeddingRequest(prompt) {
 // const OpenAI = require('openai');
 // const openai = new openai();
 
 const embedding = await openai.embeddings.create({
     model: "text-embedding-3-small",
-    input: "Action Motivation Inspiration",
+    input: prompt,
 });
 
 return embedding;
