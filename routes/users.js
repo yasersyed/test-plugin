@@ -12,6 +12,4 @@ router.get('/ve', testController.testVe);
 router.get('/image', testController.testImageGen);
 router.get('/text', testController.testTextGen);
 
-
-
 module.exports = router;
